@@ -9,11 +9,11 @@ Framework integrations for [AgentReader](https://agentreader.xyz), a read API an
 
 Both work without an API key on the free tier (5 reads/day per IP). Set `AGENTREADER_API_KEY` for prepaid credits from <https://agentreader.xyz/buy>.
 
-Until the packages are on PyPI, install from this repo:
+Install from PyPI:
 
 ```bash
-pip install "git+https://github.com/agentreader-xyz/agentreader-python#subdirectory=langchain-agentreader"
-pip install "git+https://github.com/agentreader-xyz/agentreader-python#subdirectory=llama-index-readers-agentreader"
+pip install langchain-agentreader            # https://pypi.org/project/langchain-agentreader/
+pip install llama-index-readers-agentreader  # https://pypi.org/project/llama-index-readers-agentreader/
 ```
 
 API docs: <https://agentreader.xyz/llms.txt> · MCP: `https://agentreader.xyz/mcp` · Contact: contact@agentreader.xyz
