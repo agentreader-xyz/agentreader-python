@@ -1,28 +1,41 @@
 # Publishes both packages to PyPI with Trusted Publishing (no API token stored anywhere).
-# One-time setup on pypi.org: add a pending publisher for each project name
-# (langchain-agentreader, llama-index-readers-agentreader) with owner agentreader-xyz,
-# repository agentreader-python, workflow publish.yml, environment pypi.
-# Then push a tag like v0.1.0.
+# pypi.org trusted publishers (owner agentreader-xyz, repository agentreader-python, workflow publish.yml):
+#   langchain-agentreader            -> environment pypi
+#   llama-index-readers-agentreader  -> environment pypi-llama
+# Push a tag like v0.1.0 to publish both.
 name: publish
 on:
   push:
     tags: ["v*"]
   workflow_dispatch:
 jobs:
-  publish:
+  langchain:
     runs-on: ubuntu-latest
-    environment: pypi
+    environment:
+      name: pypi
+      url: https://pypi.org/project/langchain-agentreader/
     permissions:
       id-token: write
-    strategy:
-      max-parallel: 1
-      matrix:
-        pkg: ["langchain-agentreader", "llama-index-readers-agentreader"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install build "./${{ matrix.pkg }}[test]" && pytest -q ${{ matrix.pkg }}/tests
-      - run: python -m build ${{ matrix.pkg }} --outdir dist
+      - run: pip install build "./langchain-agentreader[test]" && pytest -q langchain-agentreader/tests
+      - run: python -m build langchain-agentreader --outdir dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+  llama-index:
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi-llama
+      url: https://pypi.org/project/llama-index-readers-agentreader/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install build "./llama-index-readers-agentreader[test]" && pytest -q llama-index-readers-agentreader/tests
+      - run: python -m build llama-index-readers-agentreader --outdir dist
       - uses: pypa/gh-action-pypi-publish@release/v1
