@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "LlamaIndex reader for AgentReader: web pages, JS-rendered pages and PDF URLs to clean Markdown for LLMs"
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [{ name = "AgentReader", email = "contact@agentreader.xyz" }]
 keywords = ["llama-index", "llamaindex", "reader", "markdown", "web", "pdf", "llm", "rag", "agentreader"]
 classifiers = ["Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License"]
