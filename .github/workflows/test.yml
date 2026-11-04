@@ -1,0 +1,16 @@
+name: test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.12"]
+        pkg: ["langchain-agentreader", "llama-index-readers-agentreader"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -e "./${{ matrix.pkg }}[test]"
+      - run: pytest -q ${{ matrix.pkg }}/tests

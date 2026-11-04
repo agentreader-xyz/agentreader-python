@@ -1,0 +1,28 @@
+# Publishes both packages to PyPI with Trusted Publishing (no API token stored anywhere).
+# One-time setup on pypi.org: add a pending publisher for each project name
+# (langchain-agentreader, llama-index-readers-agentreader) with owner agentreader-xyz,
+# repository agentreader-python, workflow publish.yml, environment pypi.
+# Then push a tag like v0.1.0.
+name: publish
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    strategy:
+      max-parallel: 1
+      matrix:
+        pkg: ["langchain-agentreader", "llama-index-readers-agentreader"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install build "./${{ matrix.pkg }}[test]" && pytest -q ${{ matrix.pkg }}/tests
+      - run: python -m build ${{ matrix.pkg }} --outdir dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
